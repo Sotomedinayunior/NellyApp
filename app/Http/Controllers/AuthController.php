@@ -45,13 +45,13 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('NombreDelCliente')->accessToken;
-            return response()->json(['token' => $token], 200);
-        }
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+        $token = $user->createToken('NombreDelCliente')->accessToken;
+        return response()->json(['token' => $token, 'user_id' => $user->id], 200);
+    }
 
-        return response()->json(['error' => 'No autorizado'], 401);
+    return response()->json(['error' => 'No autorizado'], 401);
     }
 
     /**

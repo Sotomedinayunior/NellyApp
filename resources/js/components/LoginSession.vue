@@ -47,6 +47,7 @@ export default {
                 .then(response => {
                     if (response.data.token) {
                         localStorage.setItem("token", response.data.token);
+                        localStorage.setItem("user_id", response.data.user_id);
                         console.log("Token guardado", response.data.token);
                         this.$router.push("/dashboard");
                     }

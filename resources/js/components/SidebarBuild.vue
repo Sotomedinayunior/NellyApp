@@ -1,14 +1,18 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <router-link to="/dashboard" class="create-landing-link">
+                Cancelar Proceso
+            </router-link>
+
+            <img src="./static/Logo.png" class="centered-image" alt="Logo" />
+
+            <button type="submit" class="btn" @click="handleContinue">
+                Continuar
+            </button>
+        </div>
         <!-- Contenedor de los tabs -->
         <div class="sidebar">
-            <img
-                src="./static/Logo_dashboard.png"
-                alt=""
-                width="40"
-                height="40"
-                class="img"
-            />
             <div class="tab-buttons">
                 <!-- Botones para cambiar entre pestañas -->
                 <button
@@ -17,13 +21,9 @@
                     @click="changeTab(tab.name)"
                     :class="{ active: activeTab === tab.name }"
                 >
-                    <img :src="tab.icon" alt="Icono" />
                     <span>{{ tab.label }}</span>
                 </button>
             </div>
-            <form class="logout-form" @submit.prevent="submitForm">
-                <button type="submit">Cerrar Sesión</button>
-            </form>
         </div>
         <!-- Contenedor del contenido de los tabs -->
         <div class="content">
@@ -36,44 +36,37 @@
 </template>
 
 <script>
-import Reserva from "./Reserva.vue";
-import Landigns from "./Landigns.vue";
-import Help from "./Help.vue";
-import Axios from "axios";
-
-import reservas from "./static/reservas.svg";
-import landing from "./static/Landings.svg";
-import ayuda from "./static/ayuda.svg";
+import LandignsBuild from "./FormLandings.vue";
+import FormVehiculo from "./FormVehiculo.vue";
+import PreVieew from "./PreVieew.vue";
+import axios from "axios";
 
 export default {
     components: {
-        Reserva,
-        Landigns,
-        Help
+        LandignsBuild,
+        FormVehiculo,
+        PreVieew
     },
     data() {
         return {
             tabs: [
                 {
-                    name: "Landigns",
-                    label: "Landigns",
-                    component: Landigns,
-                    icon: landing
+                    name: "LandignsBuild",
+                    label: "Logo & Colors",
+                    component: LandignsBuild
                 },
                 {
-                    name: "Reserva",
-                    label: "Reserva",
-                    component: Reserva,
-                    icon: reservas
+                    name: "FormVehiculo",
+                    label: "Add Vehiculo",
+                    component: FormVehiculo
                 },
                 {
-                    name: "Help",
-                    label: "Help",
-                    component: Help,
-                    icon: ayuda
+                    name: "PreVieew",
+                    label: "Review",
+                    component: PreVieew
                 }
             ],
-            activeTab: "Reserva" // Pestaña activa por defecto
+            activeTab: "LandignsBuild" // Pestaña activa por defecto
         };
     },
     methods: {
@@ -81,76 +74,93 @@ export default {
         changeTab(tabName) {
             this.activeTab = tabName;
         },
-        // Método para enviar el formulario
-        submitForm() {
-            Axios.post("http://localhost:8000/api/logout").then(response => {
-                console.log(response.data);
-                localStorage.removeItem("token");
-                this.$router.push("/login");
-            });
+        handleContinue() {
+            // Obtener referencia al formulario LandingsBuild
+            const landingsBuildForm = this.$refs.landingsBuildForm;
+
+            // Enviar el formulario LandingsBuild
+            if (
+                landingsBuildForm &&
+                typeof landingsBuildForm.submit === "function"
+            ) {
+                landingsBuildForm.submit();
+            } else {
+                console.error("No se pudo enviar el formulario LandingsBuild.");
+            }
+
+            // Cambiar a la siguiente pestaña
+            this.changeTab("FormVehiculo");
         }
     }
 };
 </script>
 
 <style scoped>
-.img {
-    margin: 25px 0 25px 10px;
-}
-.container {
+.container-fluid {
+    width: 100%;
     display: grid;
-    grid-template-columns: 25% 75%;
+    place-content: center;
+    grid-template-columns: 1fr; /* Columna única que ocupa todo el ancho disponible */
+    grid-template-areas: "row" "sidebar" "content"; /* Posicionamiento de los elementos */
 }
 
 .sidebar {
-    grid-area: 1 / 1 / 2 / 2;
-    background-color: #f0f0f0;
-    height: 100vh;
-    font-size: clamp(8px, 11px, 13px);
-    display: flex;
-    flex-direction: column; /* Para colocar el formulario al final */
+    grid-area: sidebar;
+    width: 100%;
+    border-bottom: 1px solid #ddd; /* Línea inferior */
 }
 
 .tab-buttons {
-    margin: 10px;
+    display: flex;
+    width: 100%; /* Ajuste al 100% del ancho disponible */
 }
 
 .tab-buttons button {
-    display: flex;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.tab-buttons span {
-    margin-left: 10px;
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: center; /* Centrar el texto */
 }
 
 .tab-buttons button.active {
     font-weight: bold;
     color: #f16822;
-    width: 100%;
-    border-bottom-style: solid; /* Estilo del borde inferior */
-    border-bottom-width: 2px; /* Grosor del borde inferior */
-    border-bottom-color: #f16822;
+    border-bottom: 4px solid #f16822; /* Línea inferior */
 }
 
-.logout-form {
-    margin-top: auto; /* Para que el formulario esté al final */
+.content {
+    grid-area: content;
+    padding: 20px;
+    width: 100%; /* Ajuste al 100% del ancho disponible */
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Distribuye los elementos al principio, al final y los restantes alrededor */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin: 10px 0px 15px 0;
+}
+
+.row .create-landing-link {
     padding: 10px;
-}
-
-.logout-form button {
-    background-color: #fff; /* Fondo blanco para el botón */
-    color: #f16822; /* Color del texto */
-    border: 2px solid #f16822; /* Borde del botón */
-    padding: 8px 15px;
     border-radius: 5px;
+    background-color: #f16822;
+    color: #fff;
+    font-size: 15px;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    text-decoration: none; /* Quita el subrayado del enlace */
 }
 
-.logout-form button:hover {
-    background-color: #f16822; /* Cambia el fondo al color principal al pasar el ratón */
-    color: #fff; /* Cambia el color del texto al blanco */
+.create-landing-link:hover {
+    background-color: #ff7f50; /* Cambia el color al pasar el ratón */
+}
+
+.centered-image {
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>

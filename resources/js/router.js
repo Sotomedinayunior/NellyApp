@@ -10,7 +10,7 @@ const routes = [
     { path: "/", redirect: "/dashboard" },
     { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } }, // Ruta protegida
 
-    { path: "/build-landings", component: BuildLandings },
+    { path: "/contructor", component: BuildLandings },
     { path: "/landings", component: Landings },
     { path: "/login", component: login }
 ];

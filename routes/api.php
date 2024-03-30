@@ -26,3 +26,4 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 Route::get('/landings' , [LandingsController::class, 'index']);
 Route::get('/reserva' , [ReservaController::class, 'index']);
+Route::post('/create_landings' , [LandingsController::class, 'store']);

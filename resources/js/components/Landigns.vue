@@ -11,7 +11,9 @@
                     placeholder="Buscar un landings"
                 />
 
-                <button>+ Crear un nuevo landings</button>
+                <router-link to="/contructor" class="create-landing-link">
+                    + Crear un nuevo landings
+                </router-link>
             </div>
         </div>
         <div class="row-two">
@@ -93,15 +95,19 @@ export default {
     font-size: 12px;
 }
 
-.row button {
-    width: 100%; /* Modificado para que ocupe todo el ancho en pantallas pequeñas */
-    padding: 10px; /* Aumentado el padding para una mejor experiencia táctil */
+.create-landing-link {
+    padding: 10px;
     border-radius: 5px;
     background-color: #f16822;
     color: #fff;
     font-size: 15px;
     border: none;
     cursor: pointer;
+    text-decoration: none; /* Quita el subrayado del enlace */
+}
+
+.create-landing-link:hover {
+    background-color: #ff7f50; /* Cambia el color al pasar el ratón */
 }
 .row-two {
     display: flex;
