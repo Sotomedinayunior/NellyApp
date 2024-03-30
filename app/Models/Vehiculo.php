@@ -9,7 +9,7 @@ use App\Models\Landings;
 class Vehiculo extends Model
 {
      protected $fillable = [
-        'name', 'descripcion', 'precio', 'equipaje', 'capacidad', 'tipo', 'transmision', 'bluetooth', 'siriusX', 'GpS', 'apple_cars', 'landing_id'
+        'name', 'image1', 'image2' , 'image3', 'image4' , 'image5' , 'image6' , 'image7','image8' , 'image9' , 'image10' , 'image11' , 'image12' , 'descripcion', 'precio', 'equipaje', 'capacidad', 'tipo', 'transmision', 'bluetooth', 'siriusX', 'GpS', 'apple_cars', 'landing_id'
     ];
     public function landing()
     {

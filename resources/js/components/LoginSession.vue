@@ -43,7 +43,7 @@ export default {
         SubmitForm(e) {
             e.preventDefault();
 
-            Axios.post("http://localhost:8000/api/login", this.credencials)
+            Axios.post("http://localhost:8000/login", this.credencials)
                 .then(response => {
                     if (response.data.token) {
                         localStorage.setItem("token", response.data.token);

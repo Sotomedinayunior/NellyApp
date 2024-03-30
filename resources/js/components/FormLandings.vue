@@ -205,7 +205,7 @@ export default {
 
             // Realizar la solicitud POST utilizando Axios
             axios
-                .post("http://localhost:8000/api/create_landings", formData, {
+                .post("http://localhost:8000/create_landings", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data" // Es importante establecer este encabezado para enviar archivos
                     }

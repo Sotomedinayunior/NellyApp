@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingsController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\VehiculoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,13 +18,15 @@ use App\Http\Controllers\ReservaController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::post('/register' , [AuthController::class, 'register']);
+
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 Route::get('/landings' , [LandingsController::class, 'index']);
 Route::get('/reserva' , [ReservaController::class, 'index']);
 Route::post('/create_landings' , [LandingsController::class, 'store']);
+Route::post('/register' , [AuthController::class, 'register']);
+Route::post('/vehiculo' , [VehiculoController::class, 'index']);

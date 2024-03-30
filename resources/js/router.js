@@ -4,7 +4,7 @@ import Dashboard from "./view/Dashboard.vue";
 // import AboutView from "./view/about.vue";
 import BuildLandings from "./view/BuildLandings.vue";
 import Landings from "./view/Landings.vue";
-import login from "./view/login.vue";
+import login from "./view/Login.vue";
 
 const routes = [
     { path: "/", redirect: "/dashboard" },

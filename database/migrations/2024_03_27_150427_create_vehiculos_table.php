@@ -14,6 +14,18 @@ return new class extends Migration
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('image1');
+            $table->text('image2');
+            $table->text('image3');
+            $table->text('image4');
+            $table->text('image5');
+            $table->text('image6');
+            $table->text('image7');
+            $table->text('image8');
+            $table->text('image9');
+            $table->text('image10');
+            $table->text('image11');
+            $table->text('image12');
             $table->string('descripcion');
             $table->integer('precio');
             $table->integer('equipaje');

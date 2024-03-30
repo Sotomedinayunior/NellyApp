@@ -12,6 +12,8 @@ class VehiculoController extends Controller
      */
     public function index()
     {
+        $vehiculo = Vehiculo::all();
+        return response()->json($vehiculo);
         //
     }
 
