@@ -1,29 +1,52 @@
 <template>
     <div class="Container-Component">
-        <div class="modal" :class="{ 'is-active': showModal }">
+        <div class="modal" :class="{ 'is-active': showSuccessModal }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <!-- Contenido del modal -->
-                <div class="circle-checkmark">
-                    <span class="icon is-large">
-                        <i class="fas fa-check"></i>
-                    </span>
+                <i
+                    class="fa fa-check-circle custom-icon"
+                    aria-hidden="true"
+                ></i>
+
+                <div class="success-modal">
+                    <p>¡Landings creada! Por favor agrega los vehículos.</p>
+                    <button
+                        class="modal-close is-large btn"
+                        aria-label="close"
+                        id="Close"
+                        @click="showSuccessModal = false"
+                        :style="{ marginTop: '20px' }"
+                    >
+                        Aceptar
+                    </button>
                 </div>
-                <div class="success-message">
-                    <p>Datos enviados correctamente</p>
+            </div>
+        </div>
+
+        <!-- Modal de error -->
+        <div class="modal" :class="{ 'is-active': showErrorModal }">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="error-modal">
+                    <p>
+                        ¡Ocurrió un error! Por favor verifica que todos los
+                        campos estén completos.
+                    </p>
                 </div>
             </div>
             <button
                 class="modal-close is-large"
                 aria-label="close"
-                @click="showModal = false"
-            ></button>
+                @click="showErrorModal = false"
+            >
+                Cerrar
+            </button>
         </div>
         <form
             enctype="multipart/form-data"
             class="Form-Build"
             ref="form"
-            @submit.prevent="submitForm"
+            @submit.prevent="validateForm"
         >
             <!-- Contenido del formulario -->
             <div class="block">
@@ -157,6 +180,9 @@
                 </footer>
             </section>
         </div>
+        <div v-if="loading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+        </div>
     </div>
 </template>
 
@@ -170,7 +196,10 @@ export default {
             nombre: "",
             primary_color: "",
             secondary_color: "",
-            userId: null
+            userId: null,
+            showSuccessModal: false,
+            showErrorModal: false,
+            loading: false
         };
     },
     mounted() {
@@ -187,7 +216,18 @@ export default {
                 this.logo = null;
             }
         },
+        validateForm() {
+            // Validar si todos los campos obligatorios están llenos
+            if (!this.nombre || !this.primary_color || !this.secondary_color) {
+                // Mostrar el modal de error si algún campo está vacío
+                this.showErrorModal = true;
+            } else {
+                // Si los campos están llenos, enviar el formulario
+                this.submitForm();
+            }
+        },
         submitForm() {
+            this.loading = true;
             // Validar si todos los campos obligatorios están llenos
             if (!this.nombre || !this.primary_color || !this.secondary_color) {
                 // Mostrar mensaje de error si algún campo está vacío
@@ -213,11 +253,24 @@ export default {
                 .then(response => {
                     // Manejar la respuesta del servidor
                     console.log(response.data);
-                    this.showModal = true;
+                    const landingsId = response.data.landing_id;
+                    this.loading = false;
+
+                    // Agregar el landings_id a localStorage
+                    localStorage.setItem("landings_id", landingsId);
+                    this.nombre = "";
+                    this.primary_color = "";
+                    this.secondary_color = "";
+                    this.logo = null;
+
+                    this.showSuccessModal = true;
                 })
                 .catch(error => {
                     // Manejar cualquier error que ocurra durante la solicitud
                     console.error("Error al enviar los datos:", error);
+                    this.loading = false;
+
+                    this.showErrorModal = true;
                 });
         }
     }
@@ -225,6 +278,31 @@ export default {
 </script>
 
 <style>
+.custom-icon {
+    color: #f16822 !important;
+    font-size: 4rem;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+}
+#Close {
+    padding: 5px 10px; /* Ajusta el padding para hacer el botón más pequeño */
+    border-radius: 5px; /* Borde redondeado */
+    background-color: #f16822 !important; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    font-size: 1rem; /* Tamaño del texto */
+    border: none; /* Sin borde */
+    cursor: pointer;
+    width: 200px !important;
+    text-transform: capitalize;
+    margin: 10px 0px 10px 0;
+    text-align: center;
+
+    transition: background-color 0.3s ease; /* Transición suave al cambiar el color de fondo */
+}
+
+#Close:hover {
+    background-color: #ff7f50; /* Cambia el color de fondo al pasar el ratón */
+}
 .Container-Component {
     display: flex;
 
@@ -408,19 +486,28 @@ export default {
 }
 
 .modal.is-active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .modal-content {
     background-color: #fff;
     margin: 10% auto;
+
     padding: 20px;
     border-radius: 5px;
     position: relative;
     max-width: 400px;
     width: 90%;
 }
-
+.modal-content {
+    font-size: 0.95rem;
+    color: grey;
+    font-weight: 600;
+}
 .modal-background {
     position: absolute;
     top: 0;
@@ -431,19 +518,40 @@ export default {
     z-index: -1;
 }
 
-.circle-checkmark {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.circle-checkmark .icon {
-    color: #28a745;
-    font-size: 4em;
-}
-
 .success-message {
     text-align: center;
 }
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Fondo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Asegura que la superposición esté en la parte superior */
+}
+
+.loading-spinner {
+    border: 6px solid #f3f3f3; /* Color del borde */
+    border-top: 6px solid #3498db; /* Color del borde superior */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite; /* Animación de rotación */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 @media screen and (max-width: 768px) {
     .Container-Component {
         flex-direction: column;

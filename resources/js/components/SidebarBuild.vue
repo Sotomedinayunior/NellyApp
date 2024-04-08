@@ -6,10 +6,6 @@
             </router-link>
 
             <img src="./static/Logo.png" class="centered-image" alt="Logo" />
-
-            <button type="submit" class="btn" @click="handleContinue">
-                Continuar
-            </button>
         </div>
         <!-- Contenedor de los tabs -->
         <div class="sidebar">
@@ -160,7 +156,7 @@ export default {
 }
 
 .centered-image {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto; /* Centra horizontalmente la imagen */
+    display: block; /* Esto asegura que el margen automático funcione correctamente */
 }
 </style>

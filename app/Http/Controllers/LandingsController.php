@@ -44,8 +44,11 @@ class LandingsController extends Controller
             'user_id' => 'required'
         ]);
 
-        // Guardar la imagen
-        $imageUrl = $request->file('logo')->store('public/images');
+       $imagePath = $request->file('logo')->store('public/images');
+
+    // Obtener la ruta relativa a partir del path completo
+    $imageUrl = str_replace('public', 'storage', $imagePath);
+
 
         // Crear un nuevo objeto Landing
         $landing = new Landings();
@@ -57,7 +60,7 @@ class LandingsController extends Controller
 
         $landing->save();
 
-        return response()->json("success datos Creados");
+        return response()->json(["success" => true, "landing_id" => $landing->id]);
     }
 
     /**
@@ -87,8 +90,14 @@ class LandingsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Landings $landings)
-    {
-        //
-    }
+   /**
+ * Remove the specified resource from storage.
+ */
+public function destroy($id)
+{
+    $landing = Landings::findOrFail($id);
+    $landing->delete();
+
+    return response()->json(['message' => 'La landing ha sido eliminada exitosamente'], 200);
+}
 }

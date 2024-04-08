@@ -73,7 +73,7 @@ export default {
                     icon: ayuda
                 }
             ],
-            activeTab: "Reserva" // Pestaña activa por defecto
+            activeTab: "Landigns" // Pestaña activa por defecto
         };
     },
     methods: {
@@ -83,9 +83,8 @@ export default {
         },
         // Método para enviar el formulario
         submitForm() {
-            Axios.post("http://localhost:8000/api/logout").then(response => {
-                console.log(response.data);
-                localStorage.removeItem("token");
+            Axios.post("http://localhost:8000/logout").then(response => {
+                localStorage.clear(); //limpio la cahe para no almacenar datos de otras sessiones
                 this.$router.push("/login");
             });
         }
@@ -104,10 +103,11 @@ export default {
 
 .sidebar {
     grid-area: 1 / 1 / 2 / 2;
-    background-color: #f0f0f0;
+    background-color: white;
     height: 100vh;
     font-size: clamp(8px, 11px, 13px);
     display: flex;
+    border-right: 2px solid #ff7f50;
     flex-direction: column; /* Para colocar el formulario al final */
 }
 

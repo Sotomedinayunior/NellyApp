@@ -1,18 +1,30 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import HomeView from "./view/home.vue";
 import Dashboard from "./view/Dashboard.vue";
-// import AboutView from "./view/about.vue";
 import BuildLandings from "./view/BuildLandings.vue";
 import Landings from "./view/Landings.vue";
-import login from "./view/Login.vue";
+import Login from "./view/Login.vue";
 
 const routes = [
-    { path: "/", redirect: "/dashboard" },
-    { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } }, // Ruta protegida
-
-    { path: "/contructor", component: BuildLandings },
-    { path: "/landings", component: Landings },
-    { path: "/login", component: login }
+    { path: "/", redirect: "/dashboard", name: "Home" },
+    {
+        path: "/dashboard",
+        component: Dashboard,
+        meta: { requiresAuth: true },
+        name: "Dashboard"
+    },
+    {
+        path: "/contructor",
+        component: BuildLandings,
+        meta: { requiresAuth: true },
+        name: "BuildLandings"
+    },
+    {
+        path: "/View",
+        component: Landings,
+        meta: { requiresAuth: true },
+        name: "Landings"
+    },
+    { path: "/login", component: Login, name: "Login" }
 ];
 
 const router = createRouter({
@@ -21,13 +33,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    const isAuthenticated = localStorage.getItem("token");
+
     // Verifica si la ruta requiere autenticación
     if (to.meta.requiresAuth) {
-        // Verifica si el usuario tiene un token válido
-        const token = localStorage.getItem("token"); // Obtén el token del almacenamiento local (localStorage) o donde lo hayas almacenado
-
-        if (token) {
+        if (isAuthenticated) {
             // El usuario tiene un token válido, permite el acceso a la ruta
+            document.title = `${to.name}`;
             next();
         } else {
             // El usuario no tiene un token válido, redirige a la página de inicio de sesión
@@ -35,6 +47,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         // La ruta no requiere autenticación, permite el acceso
+        document.title = `${to.name}`;
         next();
     }
 });
