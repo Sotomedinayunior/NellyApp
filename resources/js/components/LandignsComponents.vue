@@ -51,9 +51,9 @@
                 </div>
                 <div class="card-footer">
                     <div column-left>
-                        <a :href="item.name + '.com'">
+                        <router-link :to="'/' + item.nombre">
                             <img src="./static/click.png" alt="click" />
-                        </a>
+                        </router-link>
                     </div>
                     <div class="column-right">
                         <a href="#" @click="deleteLanding(item.id)">

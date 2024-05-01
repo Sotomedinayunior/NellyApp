@@ -89,9 +89,13 @@ class VehiculoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehiculo $vehiculo)
+    public function show(Vehiculo $vehiculo , $id)
     {
-        //
+        $vehiculos = Vehiculo::where('landing_id',$id)->get();
+
+        return response()->json($vehiculos);
+
+
     }
 
     /**

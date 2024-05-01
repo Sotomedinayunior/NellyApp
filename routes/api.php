@@ -27,9 +27,13 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 Route::get('/landings' , [LandingsController::class, 'index']);
 Route::delete('/landings/{id}', [LandingsController::class, 'destroy']);
+Route::get('/landings/{id}', [LandingsController::class, 'show']);
+Route::get('/landing/{nombre}' , [LandingsController::class, 'showLandings']);
+
 Route::get('/reserva' , [ReservaController::class, 'index']);
 Route::post('/create_landings' , [LandingsController::class, 'store']);
 Route::post('/register' , [AuthController::class, 'register']);
 Route::post('/vehiculo' , [VehiculoController::class, 'index']);
+Route::get('/vehiculos/{id}' , [VehiculoController::class, 'show']);
 Route::post('/create_vehiculo' , [VehiculoController::class, 'store']);
 Route::delete('/vehiculo/{$id}' , [VehiculoController::class, 'destroy']);

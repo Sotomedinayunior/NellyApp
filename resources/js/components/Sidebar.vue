@@ -37,7 +37,7 @@
 
 <script>
 import Reserva from "./Reserva.vue";
-import Landigns from "./Landigns.vue";
+import Landigns from "./LandignsComponents.vue";
 import Help from "./Help.vue";
 import Axios from "axios";
 

@@ -24,6 +24,13 @@ const routes = [
         meta: { requiresAuth: true },
         name: "Landings"
     },
+    {
+        path: "/:landings",
+        component: Landings,
+        meta: { requiresAuth: true },
+        name: "Landings"
+    },
+
     { path: "/login", component: Login, name: "Login" }
 ];
 

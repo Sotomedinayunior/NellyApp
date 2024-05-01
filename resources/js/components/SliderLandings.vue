@@ -1,46 +1,27 @@
 <template>
-    <div>
-        <HeaderLanding :landingsData="landingsData" />
-        <SliderLandingsVue />
+    <div class="slider-landing">
+        <h1>Renta tu Vehiculo</h1>
+        <p>Busca tu vehiculo ideal</p>
+        <section>
+            <img src="./static/form.png" alt="imagen temporal" />
+        </section>
     </div>
 </template>
-
 <script>
-import Axios from "axios";
-
-import HeaderLanding from "../components/HeaderLanding.vue";
-import SliderLandingsVue from "../components/SliderLandings.vue";
 export default {
-    components: {
-        HeaderLanding,
-        SliderLandingsVue
-    },
-    data() {
-        return {
-            landingsData: null
-        };
-    },
-    mounted() {
-        const NameLandings = this.$route.params.landings;
-        console.log(NameLandings);
-
-        Axios.get(`http://localhost:8000/landing/${NameLandings}`).then(
-            response => {
-                this.landingsData = response.data;
-                console.log(response.data);
-            }
-        );
+    props: {
+        color: Object
     }
 };
 </script>
 <style>
-.slider {
+.slider-landing {
     grid-area: slider;
     position: relative; /* Posición relativa para que los elementos secundarios se posicionen con respecto a este */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 200px;
+    min-height: 500px;
     background-image: url("./static/Car.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -49,7 +30,7 @@ export default {
 }
 
 /* Capa degradado superpuesta */
-.slider::before {
+.slider-landing::before {
     content: ""; /* Obligatorio para usar ::before o ::after */
     position: absolute; /* Posición absoluta para que la capa esté sobre el contenido */
     top: 0;
@@ -62,5 +43,26 @@ export default {
         rgba(0, 0, 0, 0.7) 100%
     );
     z-index: 1; /* Asegura que la capa esté sobre el contenido */
+}
+.slider-landing h1,
+p,
+section {
+    z-index: 2;
+}
+.slider-landing h1 {
+    font-size: 3.4rem;
+    font-weight: 700;
+    margin: 10px 0 0 0;
+    color: #fff;
+}
+
+.slider-landing p {
+    color: #fff;
+    font-size: 1.7rem;
+    margin: 0px 0px 20px 0;
+}
+.slider-landing section > img {
+    width: 100%;
+    margin: 0px 0px 25px 0;
 }
 </style>

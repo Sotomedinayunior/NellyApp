@@ -13,7 +13,7 @@ class Vehiculo extends Model
     ];
     public function landing()
     {
-        return $this->belongsTo(Landings::class);
+        return $this->belongsTo(Landings::class, 'foreign_key');
     }
 
     public function reservas()

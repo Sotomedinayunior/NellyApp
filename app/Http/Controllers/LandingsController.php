@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Landings;
+use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,14 +67,24 @@ class LandingsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Landings $landings)
+    public function show($id)
     {
+         // Obtener la landing con sus vehículos relacionados
+            $landing = Landings::findOrFail($id);
+
+
+    // Devolver la landing con los vehículos como una respuesta JSON
+    return response()->json($landing);
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
+
+
+
+
     public function edit(Landings $landings)
     {
         //
@@ -88,8 +99,22 @@ class LandingsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Filtrar una landings especifica
      */
+
+
+    public function showLandings($nameLanding){
+        $landing = Landings::where('nombre' , $nameLanding )->get();
+
+
+        if (!$landing) {
+            return response()->json(['message' => 'Landing not found'], 404);
+        }
+
+        return response()->json($landing);
+
+    }
+
    /**
  * Remove the specified resource from storage.
  */

@@ -2,7 +2,7 @@
     <div class="Wrapper-Preview">
         <header class="Container-Header">
             <div class="Column-logo">
-                <img src="./static/ayuda.png" alt="" />
+                <img :src="landings.logo" :alt="landings.nombre" />
             </div>
             <div class="Column-menu">
                 <nav>
@@ -42,35 +42,114 @@
         <main class="Container-section-Card">
             <h1>Nuestros vehiculos</h1>
             <div class="Carrusel-Card">
-                <div class="card-cart">
-                    <h2>Tesla Model Y 2023</h2>
+                <div class="card-cart" v-for="item of vehiculo" :key="item.id">
+                    <h2>{{ item.name }}</h2>
                     <div class="section-info">
                         <div class="container-icon">
                             <span
-                                ><img src="./static/user.png" alt="user-icon"
-                            /></span>
+                                ><img
+                                    src="./static/user.png"
+                                    alt="user-icon"
+                                />{{ item.capacidad }}</span
+                            >
                             <span
-                                ><img src="./static/user.png" alt="user-icon"
-                            /></span>
+                                ><img
+                                    src="./static/bag.png"
+                                    alt="user-icon"
+                                />{{ item.equipaje }}</span
+                            >
                         </div>
                         <div class="container-price">
-                            <span>US$45.00</span><span>/day</span>
+                            <span>{{ item.precio }}</span
+                            ><span>/day</span>
                         </div>
                     </div>
-                    <img src="./static/cart.png" alt="" class="image-cart" />
+                    <img
+                        :src="item.image"
+                        :alt="item.name"
+                        class="image-cart"
+                    />
                 </div>
             </div>
         </main>
         <article class="Container-info">
             <div class="Column-image">
-                <img src="./static/autos.png" alt="Imagen" />
+                <img src="./static/autos.png" alt="Imagen" class="Imagen" />
             </div>
             <div class="Column-checklist">
                 <h1>How it works</h1>
+                <ul>
+                    <li>
+                        <strong>Select Your Car</strong>
+                        <p>
+                            Browse our fleet and choose the one that fits your
+                            needs.
+                        </p>
+                    </li>
+                    <li>
+                        <strong>Book Your Ride</strong>
+                        <p>
+                            Fill out the booking form with your details and trip
+                            dates.
+                        </p>
+                    </li>
+                    <li>
+                        <strong>Enjoy Your Trip</strong>
+                        <p>
+                            Drive safely and enjoy your trip! Return the car at
+                            your convenience.
+                        </p>
+                    </li>
+                </ul>
             </div>
         </article>
+        <footer class="footer-pages">
+            <ul class="container-item">
+                <li><a href="#">Legal Notice</a></li>
+                <li><a href="#">Privacy policy </a></li>
+                <li><a href="#">cookies policy</a></li>
+                <li><a href="#">cookie Notice</a></li>
+            </ul>
+            <p class="Right-author">
+                &copy;{{ new Date().getFullYear() }} All rights reserved
+            </p>
+        </footer>
     </div>
 </template>
+<script>
+import axios from "axios";
+export default {
+    data() {
+        return {
+            landings: {},
+            vehiculo: {}
+        };
+    },
+    mounted() {
+        let id = localStorage.getItem("landings_id");
+
+        axios
+            .get(`http://localhost:8000/landings/${id}`)
+            .then(response => {
+                this.landings = response.data;
+                console.log(response.data);
+            })
+            .catch(err => {
+                console.error(`Tenemos un error ${err}`);
+            });
+
+        axios
+            .get(`http://localhost:8000/vehiculos/${id}`)
+            .then(response => {
+                this.vehiculo = response.data;
+                console.log(response.data);
+            })
+            .catch(err => {
+                console.error(`El error es ${err}`);
+            });
+    }
+};
+</script>
 <style scoped>
 .Wrapper-Preview {
     display: grid;
@@ -78,13 +157,18 @@
     grid-template-columns: auto auto;
     margin: 10px 10px 0px 10px;
     width: 100%;
-    grid-template-areas: "header header" "slider slider" "main main" "article article";
+    grid-template-areas: "header header" "slider slider" "main main" "article article" "footer footer";
 }
 .Container-item {
     display: flex;
 }
 .Column-logo {
     height: 0;
+}
+.Column-logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
 }
 .Container-item li {
     font-size: 12px;
@@ -97,9 +181,10 @@
 }
 .Container-Header {
     grid-area: header;
-    padding: 0.9rem;
+    padding: 0.92rem;
     justify-content: space-between;
     display: flex;
+    margin: 10px 0px 20px 0px;
     height: auto; /* Establece la altura automáticamente según el contenido */
 }
 .Slider {
@@ -190,7 +275,8 @@
 .container-icon span {
     background-color: #f2f2f2;
     border-radius: 20px;
-    margin: 0px 10px 0px 0px;
+    display: flex;
+    margin: 0px 10px 0px 4px;
     padding: 5px;
 }
 .container-price {
@@ -207,11 +293,71 @@
 .image-cart {
     width: 250px;
     border-radius: 15px;
-    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16/9;
 }
 .Container-info {
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 50% 50%;
+    justify-content: space-between;
 }
 .Column-image {
+    margin: auto 0;
+}
+.Imagen {
+    max-width: 100%;
+    height: 300px;
+    aspect-ratio: 40/21;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.Column-checklist {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    padding: 10px 10px 20px 25px;
+}
+.Column-checklist h1 {
+    font-size: 2.375rem;
+    font-weight: 700;
+    margin: 10px 10px 15px 20px;
+}
+
+.Column-checklist ul {
+    display: flex;
+    flex-direction: row;
+}
+
+.footer-pages {
+    background-color: #dddddd33;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.footer-pages {
+    grid-area: footer;
+    margin: 10px 0px -1px 0;
+    padding: 15px;
+}
+.container-item {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+
+    color: #222;
+}
+.container-item li a {
+    font-size: 13px;
+    margin: 0px 10px 0px 10px;
+}
+.Right-author {
+    margin: 10px 0px 10px 0px;
+    text-align: center;
+    color: #222;
+    font-size: 12px;
 }
 </style>
